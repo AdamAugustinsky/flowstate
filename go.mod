@@ -1,4 +1,4 @@
-module flowstate
+module github.com/adamaugustinsky/flowstate
 
 go 1.24.3
 
