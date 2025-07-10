@@ -12,7 +12,12 @@ Make sure `~/go/bin` is in your PATH.
 
 ## Usage
 
-Just run `flowstate` in any directory. Your todos are saved in a `TODO.md` file that's created when you add your first task.
+```bash
+flowstate      # Local todos in current directory
+flowstate -g   # Global todos in ~/config/flowstate/
+```
+
+Your todos are saved in a `TODO.md` file that's created when you add your first task.
 
 ### Keys
 

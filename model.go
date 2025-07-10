@@ -29,10 +29,11 @@ type model struct {
 	height       int
 	selectedTodo *Todo
 	inputStep    int // 0=title, 1=description
+	isGlobal     bool
 }
 
-func initialModel() model {
-	store := NewTodoStore("TODO.md")
+func initialModel(todoPath string, isGlobal bool) model {
+	store := NewTodoStore(todoPath)
 	
 	items := []list.Item{}
 	for _, todo := range store.GetAll() {
@@ -43,7 +44,11 @@ func initialModel() model {
 	const defaultHeight = 14
 
 	l := list.New(items, itemDelegate{}, defaultWidth, defaultHeight)
-	l.Title = "Flowstate"
+	if isGlobal {
+		l.Title = "Flowstate (Global)"
+	} else {
+		l.Title = "Flowstate"
+	}
 	l.SetShowStatusBar(false)
 	l.SetFilteringEnabled(false)
 	l.Styles.Title = titleStyle
@@ -72,6 +77,7 @@ func initialModel() model {
 		store:     store,
 		mode:      listView,
 		inputStep: 0,
+		isGlobal:  isGlobal,
 	}
 }
 

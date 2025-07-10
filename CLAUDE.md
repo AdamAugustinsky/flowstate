@@ -14,7 +14,8 @@ Flowstate is a terminal-based todo list application built with Go and the Charm 
 go build -o flowstate
 
 # Run the application
-./flowstate
+./flowstate       # Local mode (uses ./TODO.md)
+./flowstate -g    # Global mode (uses ~/config/flowstate/TODO.md)
 
 # Install globally
 go install
