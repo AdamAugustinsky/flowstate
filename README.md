@@ -52,7 +52,7 @@ Run the application:
 
 ## Data Storage
 
-Todos are automatically saved to `TODO.md` in the current directory using the standard TODO.md format. The file is created automatically on first use.
+Todos are automatically saved to `TODO.md` in the current directory using the standard TODO.md format. The file is only created when you add your first todo, keeping your directories clean.
 
 ### TODO.md Format
 

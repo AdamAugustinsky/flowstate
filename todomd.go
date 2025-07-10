@@ -142,6 +142,15 @@ func (s *TodoStore) parseTodoMD() error {
 }
 
 func (s *TodoStore) writeTodoMD() error {
+	// Don't create file if there are no todos
+	if len(s.todos) == 0 {
+		// If file exists and todos are empty, remove the file
+		if _, err := os.Stat(s.filename); err == nil {
+			return os.Remove(s.filename)
+		}
+		return nil
+	}
+
 	file, err := os.Create(s.filename)
 	if err != nil {
 		return err

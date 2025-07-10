@@ -226,7 +226,15 @@ func (m model) View() string {
 	var content string
 	switch m.mode {
 	case listView:
-		content = docStyle.Render(m.list.View())
+		if len(m.store.GetAll()) == 0 {
+			emptyMsg := lipgloss.NewStyle().
+				Foreground(lipgloss.Color("#626262")).
+				Padding(2, 0).
+				Render("No todos yet. Press 'a' to add your first task!")
+			content = docStyle.Render(emptyMsg)
+		} else {
+			content = docStyle.Render(m.list.View())
+		}
 	case inputView:
 		var inputContent string
 		if m.inputStep == 0 {
