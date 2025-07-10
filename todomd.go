@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	todoMDHeader = `# TUITodo
+	todoMDHeader = `# Flowstate
 A terminal-based todo list application
 
 `

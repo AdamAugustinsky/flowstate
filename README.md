@@ -1,6 +1,6 @@
-# TUITodo
+# Flowstate
 
-A beautiful terminal-based todo list application built with Go and Charm libraries.
+A beautiful terminal-based todo list application built with Go and Charm libraries. Get into your productive flow state with an elegant TUI for managing your tasks.
 
 ## Features
 
@@ -19,7 +19,7 @@ A beautiful terminal-based todo list application built with Go and Charm librari
 
 ```bash
 git clone <repository>
-cd tuitodo
+cd flowstate
 go build
 ```
 
@@ -28,7 +28,7 @@ go build
 Run the application:
 
 ```bash
-./tuitodo
+./flowstate
 ```
 
 ### Keyboard Shortcuts
@@ -59,7 +59,7 @@ Todos are automatically saved to `TODO.md` in the current directory using the st
 The app uses the TODO.md format which is based on GitHub Flavored Markdown task lists:
 
 ```markdown
-# TUITodo
+# Flowstate
 A terminal-based todo list application
 
 ### Tasks

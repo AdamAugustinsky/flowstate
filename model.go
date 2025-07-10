@@ -43,7 +43,7 @@ func initialModel() model {
 	const defaultHeight = 14
 
 	l := list.New(items, itemDelegate{}, defaultWidth, defaultHeight)
-	l.Title = "Todo List"
+	l.Title = "Flowstate"
 	l.SetShowStatusBar(false)
 	l.SetFilteringEnabled(false)
 	l.Styles.Title = titleStyle
