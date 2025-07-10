@@ -17,11 +17,34 @@ A beautiful terminal-based todo list application built with Go and Charm librari
 
 ## Installation
 
+### Install from GitHub (Recommended)
+
 ```bash
-git clone <repository>
-cd flowstate
-go build
+go install github.com/adamaugustinsky/flowstate@latest
 ```
+
+Make sure `$GOPATH/bin` is in your PATH. Add this to your shell config (`~/.bashrc`, `~/.zshrc`, etc.):
+
+```bash
+export PATH="$HOME/go/bin:$PATH"
+```
+
+### Build from Source
+
+```bash
+git clone https://github.com/adamaugustinsky/flowstate
+cd flowstate
+go build -o flowstate
+
+# Optional: Install to your PATH
+go install
+# Or manually:
+sudo cp flowstate /usr/local/bin/
+```
+
+### Requirements
+
+- Go 1.21 or higher
 
 ## Usage
 
