@@ -28,13 +28,6 @@ Just run `flowstate` in any directory. Your todos are saved in a `TODO.md` file 
 - `enter` - next/save
 - `esc` - cancel
 
-## Why Flowstate?
-
-- **Clean** - No files until you create a todo
-- **Portable** - Just markdown, edit anywhere
-- **Fast** - Keyboard-driven workflow
-- **Pretty** - Built with [Charm](https://charm.sh)
-
 ## Build from source
 
 ```bash
