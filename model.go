@@ -15,6 +15,7 @@ const (
 	listView viewMode = iota
 	inputView
 	detailView
+	editView
 )
 
 type model struct {
@@ -31,7 +32,7 @@ type model struct {
 }
 
 func initialModel() model {
-	store := NewTodoStore("todos.json")
+	store := NewTodoStore("TODO.md")
 	
 	items := []list.Item{}
 	for _, todo := range store.GetAll() {
@@ -120,6 +121,16 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					m.refreshList()
 				}
 				return m, nil
+			case "e":
+				if i, ok := m.list.SelectedItem().(Todo); ok {
+					m.selectedTodo = &i
+					m.mode = editView
+					m.inputStep = 0
+					m.textInput.SetValue(i.Title)
+					m.textArea.SetValue(i.Description)
+					return m, m.textInput.Focus()
+				}
+				return m, nil
 			}
 			
 		case inputView:
@@ -149,6 +160,38 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case "q", "esc":
 				m.mode = listView
 				return m, nil
+			case "e":
+				m.mode = editView
+				m.inputStep = 0
+				m.textInput.SetValue(m.selectedTodo.Title)
+				m.textArea.SetValue(m.selectedTodo.Description)
+				return m, m.textInput.Focus()
+			}
+		
+		case editView:
+			switch keypress := msg.String(); keypress {
+			case "enter":
+				if m.inputStep == 0 {
+					m.inputStep = 1
+					m.textArea.Focus()
+					return m, textarea.Blink
+				} else {
+					if m.selectedTodo != nil && m.textInput.Value() != "" {
+						m.store.Update(m.selectedTodo.ID, m.textInput.Value(), m.textArea.Value())
+						m.refreshList()
+						// Update the selected todo with new values
+						if todo := m.store.GetByID(m.selectedTodo.ID); todo != nil {
+							m.selectedTodo = todo
+						}
+					}
+					m.mode = listView
+					m.inputStep = 0
+				}
+				return m, nil
+			case "esc":
+				m.mode = listView
+				m.inputStep = 0
+				return m, nil
 			}
 		}
 	}
@@ -165,6 +208,12 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	case detailView:
 		m.viewport, cmd = m.viewport.Update(msg)
+	case editView:
+		if m.inputStep == 0 {
+			m.textInput, cmd = m.textInput.Update(msg)
+		} else {
+			m.textArea, cmd = m.textArea.Update(msg)
+		}
 	}
 	return m, cmd
 }
@@ -200,6 +249,26 @@ func (m model) View() string {
 		content = docStyle.Render(inputContent)
 	case detailView:
 		content = docStyle.Render(m.detailView())
+	case editView:
+		var editContent string
+		if m.inputStep == 0 {
+			editContent = lipgloss.JoinVertical(lipgloss.Left,
+				titleStyle.Render("Edit Todo - Title"),
+				"",
+				m.textInput.View(),
+				"",
+				helpStyle.Render("Press Enter to continue to description, Esc to cancel"),
+			)
+		} else {
+			editContent = lipgloss.JoinVertical(lipgloss.Left,
+				titleStyle.Render("Edit Todo - Description"),
+				"",
+				m.textArea.View(),
+				"",
+				helpStyle.Render("Press Enter to save, Esc to cancel"),
+			)
+		}
+		content = docStyle.Render(editContent)
 	}
 
 	help := m.helpView()
@@ -224,11 +293,13 @@ func (m model) helpView() string {
 	var help string
 	switch m.mode {
 	case listView:
-		help = helpStyle.Render("a: add • enter: details • space: toggle • d: delete • q: quit")
+		help = helpStyle.Render("a: add • e: edit • enter: details • space: toggle • d: delete • q: quit")
 	case inputView:
 		help = helpStyle.Render("enter: next/save • esc: cancel")
 	case detailView:
-		help = helpStyle.Render("esc/q: back to list")
+		help = helpStyle.Render("e: edit • esc/q: back to list")
+	case editView:
+		help = helpStyle.Render("enter: next/save • esc: cancel")
 	}
 	return help
 }

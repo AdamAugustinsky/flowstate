@@ -1,19 +1,17 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
 	"time"
 )
 
 type Todo struct {
-	ID          string    `json:"id"`
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	Completed   bool      `json:"completed"`
-	CreatedAt   time.Time `json:"created_at"`
-	CompletedAt *time.Time `json:"completed_at,omitempty"`
+	ID          string
+	Title       string
+	Description string
+	Completed   bool
+	CreatedAt   time.Time
+	CompletedAt *time.Time
 }
 
 func (t *Todo) Toggle() {
@@ -104,28 +102,14 @@ func (s *TodoStore) GetByID(id string) *Todo {
 	return nil
 }
 
-func (s *TodoStore) Save() error {
-	file, err := os.Create(s.filename)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	encoder := json.NewEncoder(file)
-	encoder.SetIndent("", "  ")
-	return encoder.Encode(s.todos)
-}
-
-func (s *TodoStore) Load() error {
-	file, err := os.Open(s.filename)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return nil
+func (s *TodoStore) Update(id, title, description string) {
+	for i := range s.todos {
+		if s.todos[i].ID == id {
+			s.todos[i].Title = title
+			s.todos[i].Description = description
+			s.Save()
+			return
 		}
-		return err
 	}
-	defer file.Close()
-
-	decoder := json.NewDecoder(file)
-	return decoder.Decode(&s.todos)
 }
+

@@ -1,4 +1,4 @@
-module tuitodo
+module flowstate
 
 go 1.24.3
 
